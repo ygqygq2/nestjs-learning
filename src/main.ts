@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {NestFastifyApplication, FastifyAdapter} from '@nestjs/platform-fastify';
+import { NestFastifyApplication, FastifyAdapter } from '@nestjs/platform-fastify';
 // import { exp1 } from './decorators';
 // import { exp2 } from './decorators';
 // import { exp3 } from './decorators';
@@ -31,5 +31,10 @@ async function bootstrap() {
   // 允许跨域
   app.enableCors();
   await app.listen(3000, '0.0.0.0');
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
