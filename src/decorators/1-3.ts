@@ -14,6 +14,7 @@ const SetNameDecorator = (firstname: string, lastname: string) => {
 @SetNameDecorator('jesse', 'pincman')
 class UserService {
   [func: string]: any;
+
   c() {}
 }
 

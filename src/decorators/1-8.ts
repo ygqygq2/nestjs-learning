@@ -57,6 +57,6 @@ export const exp8 = () => {
 //  password: '123456',
 //  _nickname: 'gkr__lichnow',
 //  fullname: 'gkr__lichnow_fullname'
-//}
+// }
 // 第二个console.log控制台输出
 // gkr__lichnow

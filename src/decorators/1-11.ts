@@ -1,8 +1,8 @@
 /**
  * 装饰器调用顺序
  */
-import { UserType } from './1-7';
 import { UserService as ParentUserService } from './1-10';
+import { UserType } from './1-7';
 
 const requiredMetadataKey = Symbol('required');
 
@@ -53,7 +53,7 @@ export const exp11 = () => {
   console.log('-----------------------为username参数提供必填验证-----------------------');
   console.log();
   const user = new UserService();
-  user.createUser("user1");
+  user.createUser('user1');
   console.log(user.getUsers());
   console.log();
   console.log('-----------------------示例11:执行完毕-----------------------');

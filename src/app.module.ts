@@ -1,12 +1,14 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
-import { Module } from '@nestjs/common';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { ConfigEnum } from './enum/config.enum';
+import { UserModule } from './user/user.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 
@@ -30,17 +32,18 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: configService.get(ConfigEnum.DB_TYPE),
-        host: configService.get(ConfigEnum.DB_HOST),
-        port: configService.get(ConfigEnum.DB_PORT),
-        username: configService.get(ConfigEnum.DB_USERNAME),
-        password: configService.get(ConfigEnum.DB_PASSWORD),
-        database: configService.get(ConfigEnum.DB_DATABASE),
-        entities: [],
-        synchronize: configService.get(ConfigEnum.DB_SYNC),
-        logging: ['warn', 'error'],
-      } as TypeOrmModuleOptions),
+      useFactory: (configService: ConfigService) =>
+        ({
+          type: configService.get(ConfigEnum.DB_TYPE),
+          host: configService.get(ConfigEnum.DB_HOST),
+          port: configService.get(ConfigEnum.DB_PORT),
+          username: configService.get(ConfigEnum.DB_USERNAME),
+          password: configService.get(ConfigEnum.DB_PASSWORD),
+          database: configService.get(ConfigEnum.DB_DATABASE),
+          entities: [],
+          synchronize: configService.get(ConfigEnum.DB_SYNC),
+          logging: ['warn', 'error'],
+        } as TypeOrmModuleOptions),
     }),
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
