@@ -42,7 +42,7 @@ module.exports = {
         args: 'none',
         ignoreRestSiblings: true,
       },
-    ]
+    ],
   },
   // 导入模块的顺序
   'import/order': [
@@ -55,7 +55,7 @@ module.exports = {
           position: 'after',
         },
       ],
-      alphabetize: {order: 'asc', caseInsensitive: false},
+      alphabetize: { order: 'asc', caseInsensitive: false },
       'newlines-between': 'always-and-inside-groups',
       warnOnUnassignedImports: true,
     },
@@ -64,12 +64,7 @@ module.exports = {
   'import/no-extraneous-dependencies': [
     'error',
     {
-      devDependencies: [
-        '**/*.test.{ts,js}',
-        '**/*.spec.{ts,js}',
-        './test/**.{ts,js}',
-        './scripts/**/*.{ts,js}',
-      ],
+      devDependencies: ['**/*.test.{ts,js}', '**/*.spec.{ts,js}', './test/**.{ts,js}', './scripts/**/*.{ts,js}'],
     },
   ],
 };

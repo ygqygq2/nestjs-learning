@@ -26,7 +26,7 @@
     "release": "bumpp"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "pnpm run lint-staged:js",
+    "**/*.{js,jsx,ts,tsx}": "pnpm run lint",
     "**/*.{js,jsx,tsx,ts,less,md,json}": [
       "prettier --write"
     ]
@@ -65,6 +65,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.1.6",
     "eslint-plugin-prettier": "^4.2.1",

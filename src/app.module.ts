@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
-import Joi from 'joi';
+import * as dotenv from 'dotenv';
+import * as Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigEnum } from './enum/config.enum';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -15,13 +15,13 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath,
-      load: [() => dotenv.config({ path: '.env' })],  // 合并公共配置
+      load: [() => dotenv.config({ path: '.env' })], // 合并公共配置
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
         DB_HOST: Joi.string().default('localhost'),
         DB_PORT: Joi.number().default(3306),
-        DB_USERNAME: Joi.string(),
-        DB_PASSWORD: Joi.string(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),
         DB_TYPE: Joi.string().valid('mysql', 'postgres').default('mysql'),
         DB_SYNC: Joi.boolean().default(false),
@@ -30,18 +30,17 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        ({
-          type: configService.get(ConfigEnum.DB_TYPE),
-          host: configService.get(ConfigEnum.DB_HOST),
-          port: configService.get(ConfigEnum.DB_PORT),
-          username: configService.get(ConfigEnum.DB_USERNAME),
-          password: configService.get(ConfigEnum.DB_PASSWORD),
-          database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [],
-          synchronize: true,
-          logging: ['warn', 'error'],
-        } as TextDecoderOptions),
+      useFactory: (configService: ConfigService) => ({
+        type: configService.get(ConfigEnum.DB_TYPE),
+        host: configService.get(ConfigEnum.DB_HOST),
+        port: configService.get(ConfigEnum.DB_PORT),
+        username: configService.get(ConfigEnum.DB_USERNAME),
+        password: configService.get(ConfigEnum.DB_PASSWORD),
+        database: configService.get(ConfigEnum.DB_DATABASE),
+        entities: [],
+        synchronize: configService.get(ConfigEnum.DB_SYNC),
+        logging: ['warn', 'error'],
+      } as TypeOrmModuleOptions),
     }),
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
