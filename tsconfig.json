@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"]
-    },
+    }
   },
-  "include": ["src", "test", "typings/**/*.d.ts", "**.js"]
+  "include": ["src", "test", "typings/**/*.d.ts", "**.js"],
+  "exclude": [".history"]
 }
