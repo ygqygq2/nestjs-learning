@@ -28,4 +28,11 @@ export class UserService {
   remove(id: number) {
     return this.userRepository.delete(id);
   }
+
+  findProfile(id: number) {
+    return this.userRepository.findOne({
+      where: { id },
+      relations: { profile: true },
+    });
+  }
 }
