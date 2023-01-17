@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Post } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 
@@ -16,14 +16,15 @@ export class LogsController {
 
   @Post()
   addlogs(): any {
-    const logs = { logsname: 'ygqygq2', password: '123456' } as logs;
+    const logs = {
+      path: '/api/user',
+      data: { username: 'ygqygq2', password: '123456' },
+      userId: 2,
+      method: 'post',
+      result: '201',
+    } as logs;
     return this.logsService.create(logs);
     // return this.logsService.addlogs();
-  }
-
-  @Patch()
-  updatelogs(): any {
-    return this.logsService.update(1, { logsname: 'ygqygq2', password: 'ygqygq2' });
   }
 
   @Delete()
@@ -31,8 +32,17 @@ export class LogsController {
     return this.logsService.remove(1);
   }
 
-  @Get('/profile')
-  getlogsProfile(): any {
+  @Get('/logs')
+  getUserLogs(): any {
     return this.logsService.findProfile(2);
+  }
+
+  @Get('/logsByGroup')
+  async getLogsByGroup(): Promise<any> {
+    const res = this.logsService.findLogsByGroup(2);
+    return res.map((o) => ({
+      result: o.result,
+      count: o.count,
+    }));
   }
 }

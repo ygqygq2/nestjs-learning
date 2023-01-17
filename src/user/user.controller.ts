@@ -36,4 +36,9 @@ export class UserController {
   getUserProfile(): any {
     return this.userService.findProfile(2);
   }
+
+  @Get('/logs')
+  getUserLogs(): any {
+    return this.userService.findUserLogs(2);
+  }
 }
