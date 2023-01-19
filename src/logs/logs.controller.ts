@@ -1,7 +1,8 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 
+import { Logs } from './logs.entity';
 import { LogsService } from './logs.service';
 
 @Controller('logs')
@@ -9,38 +10,26 @@ export class LogsController {
   constructor(private logsService: LogsService, protected configService: ConfigService) {}
 
   @Get()
-  getlogss(): any {
+  getLogs(): any {
     return this.logsService.findAll();
-    // return this.logsService.getlogss();
   }
 
   @Post()
   addlogs(): any {
-    const logs = {
+    const logsTmp = {
       path: '/api/user',
-      data: { username: 'ygqygq2', password: '123456' },
-      userId: 2,
+      data: '测试日志',
+      user: { username: 'ygqygq2', password: '123456' },
       method: 'post',
-      result: '201',
-    } as logs;
-    return this.logsService.create(logs);
-    // return this.logsService.addlogs();
-  }
-
-  @Delete()
-  removelogs(): any {
-    return this.logsService.remove(1);
-  }
-
-  @Get('/logs')
-  getUserLogs(): any {
-    return this.logsService.findProfile(2);
+      result: 201,
+    } as Logs;
+    return this.logsService.create(logsTmp);
   }
 
   @Get('/logsByGroup')
   async getLogsByGroup(): Promise<any> {
     const res = this.logsService.findLogsByGroup(2);
-    return res.map((o) => ({
+    return (await res).map((o) => ({
       result: o.result,
       count: o.count,
     }));

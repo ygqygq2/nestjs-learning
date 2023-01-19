@@ -122,6 +122,9 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/no-unsafe-argument': 0,
     '@typescript-eslint/ban-ts-comment': 0,
+    /* ********************************** 其它规则 ********************************** */
+    'dot-notation': 'off',
+    '@typescript-eslint/dot-notation': 'off',
   },
   settings: {
     extensions: ['.ts', '.d.ts', '.cts', '.mts', '.js', '.cjs', 'mjs', '.json'],

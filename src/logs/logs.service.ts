@@ -3,12 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Logs } from '@/logs/logs.entity';
-import { User } from '@/user/user.entity';
 
 @Injectable()
 export class LogsService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    // @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Logs) private readonly logsRepository: Repository<Logs>,
   ) {}
 
@@ -25,17 +24,17 @@ export class LogsService {
     return this.logsRepository.save(logTmp);
   }
 
-  async findUserLogs(id: number) {
-    const user = await this.userRepository.findOne(id);
-    return this.logsRepository.find({
-      where: {
-        user,
-      },
-      relations: {
-        user: true,
-      },
-    });
-  }
+  // async findUserLogs(id: number) {
+  //   const user = await this.userRepository.findOne(id);
+  //   return this.logsRepository.find({
+  //     where: {
+  //       user,
+  //     },
+  //     relations: {
+  //       user: true,
+  //     },
+  //   });
+  // }
 
   findLogsByGroup(id: number) {
     // SELECT logs.result as result, COUNT(logs.result) AS count FROM logs, user WHERE logs.user_id = logs.userId AND user.id = 2 GROUP BY logs.result;

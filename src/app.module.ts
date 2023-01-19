@@ -1,17 +1,16 @@
-import { join } from 'path';
-
-import { Module } from '@nestjs/common';
+import { Global, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 
-import { LoggerModule } from 'nestjs-pino';
+// import { LoggerModule } from 'nestjs-pino';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigEnum } from './enum/config.enum';
 import { Logs } from './logs/logs.entity';
+import { LogsModule } from './logs/logs.module';
 import { Roles } from './roles/roles.entity';
 import { Profile } from './user/profile.entity';
 import { User } from './user/user.entity';
@@ -19,6 +18,7 @@ import { UserModule } from './user/user.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -63,35 +63,37 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
     //   synchronize: true,
     //   logging: ['warn', 'error'],
     // }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: {
-          targets: [
-            process.env.NODE_ENV === 'development'
-              ? {
-                  level: 'info',
-                  target: 'pino-pretty',
-                  options: {
-                    colorize: true,
-                  },
-                }
-              : {
-                  level: 'error',
-                  target: 'pino-proll',
-                  options: {
-                    file: join('logs', 'output.log'),
-                    frequency: 'daily',
-                    size: '10m',
-                    mkdir: true,
-                  },
-                },
-          ],
-        },
-      },
-    }),
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     transport: {
+    //       targets: [
+    //         process.env.NODE_ENV === 'development'
+    //           ? {
+    //               level: 'info',
+    //               target: 'pino-pretty',
+    //               options: {
+    //                 colorize: true,
+    //               },
+    //             }
+    //           : {
+    //               level: 'error',
+    //               target: 'pino-proll',
+    //               options: {
+    //                 file: join('logs', 'output.log'),
+    //                 frequency: 'daily',
+    //                 size: '10m',
+    //                 mkdir: true,
+    //               },
+    //             },
+    //       ],
+    //     },
+    //   },
+    // }),
     UserModule,
+    LogsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [Logger, AppService],
+  exports: [Logger],
 })
 export class AppModule {}

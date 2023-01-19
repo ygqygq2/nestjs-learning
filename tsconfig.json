@@ -23,7 +23,7 @@
     "pretty": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "allowJs": true,
     "importsNotUsedAsValues": "remove",
     "noEmit": false,

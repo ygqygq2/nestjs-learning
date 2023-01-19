@@ -45,13 +45,17 @@
     "joi": "^17.7.0",
     "lodash": "^4.17.21",
     "mysql2": "3.0.0-rc.1",
+    "nest-winston": "^1.8.0",
     "nestjs-pino": "^3.1.2",
     "pino-http": "^8.3.1",
     "pino-roll": "1.0.0-rc.1",
     "reflect-metadata": "^0.1.13",
+    "request-ip": "^3.3.0",
     "rimraf": "^3.0.2",
     "rxjs": "^7.6.0",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.11",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.5",
@@ -60,6 +64,7 @@
     "@types/express": "^4.17.14",
     "@types/jest": "29.2.4",
     "@types/node": "^18.11.13",
+    "@types/request-ip": "^0.0.37",
     "@types/supertest": "^2.0.12",
     "@types/webpack-env": "^1.18.0",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
