@@ -5,6 +5,7 @@ specifiers:
   '@nestjs/common': ^9.2.1
   '@nestjs/config': ^2.2.0
   '@nestjs/core': ^9.2.1
+  '@nestjs/mapped-types': ^1.2.0
   '@nestjs/platform-express': ^9.2.1
   '@nestjs/platform-fastify': ^9.2.1
   '@nestjs/schematics': ^9.0.3
@@ -64,6 +65,7 @@ dependencies:
   '@nestjs/common': 9.2.1_537f4dyna5eqdupcxnvaoq3vwa
   '@nestjs/config': 2.2.0_wqmgrsh4vfci5e6jx45m6crmsi
   '@nestjs/core': 9.2.1_ajc4cvdydchgvxyi4xnoij5t4i
+  '@nestjs/mapped-types': 1.2.0_ejjx6q7ue32bc24a7sespjpcyu
   '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
   '@nestjs/platform-fastify': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
   '@nestjs/swagger': 6.1.4_4fhhxyztwhblafku3krlstrun4

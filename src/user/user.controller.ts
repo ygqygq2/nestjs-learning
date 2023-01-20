@@ -20,7 +20,7 @@ export class UserController {
 
   @Get()
   getUsers(): any {
-    const user = { isAdmin: false };
+    const user = { isAdmin: true };
     if (!user.isAdmin) {
       throw new HttpException('User is not admin, Forbidden to access getAllUsers', HttpStatus.FORBIDDEN);
     }
@@ -49,5 +49,19 @@ export class UserController {
   @Get('/profile')
   getUserProfile(): any {
     return this.userService.findProfile(2);
+  }
+
+  @Get('/logs')
+  getUserLogs(): any {
+    return this.userService.findUserLogs(2);
+  }
+
+  @Get('/logsByGroup')
+  async getLogsByGroup(): Promise<any> {
+    const res = this.userService.findLogsByGroup(2);
+    return (await res).map((o) => ({
+      result: o.result,
+      count: o.count,
+    }));
   }
 }
