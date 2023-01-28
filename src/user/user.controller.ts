@@ -1,9 +1,8 @@
-import { Controller, Delete, Get, HttpException, HttpStatus, Inject, LoggerService, Patch, Post } from '@nestjs/common';
-
+import { Controller, Delete, Get, Inject, LoggerService, Patch, Post, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
+import { GetUserDto } from './dto/get-user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -18,14 +17,17 @@ export class UserController {
     this.logger.log('UserController init');
   }
 
+  /**
+   *
+   * @param query - 查询参数
+   * @param query.page - 页码
+   * @param query.limit - 每页数量
+   * @param query.condition - 查询条件
+   * @returns
+   */
   @Get()
-  getUsers(): any {
-    const user = { isAdmin: true };
-    if (!user.isAdmin) {
-      throw new HttpException('User is not admin, Forbidden to access getAllUsers', HttpStatus.FORBIDDEN);
-    }
-    this.logger.log('UserController getUsers succes');
-    return this.userService.findAll();
+  getUsers(@Query() query: GetUserDto): any {
+    return this.userService.findAll(query);
     // return this.userService.getUsers();
   }
 
@@ -47,8 +49,8 @@ export class UserController {
   }
 
   @Get('/profile')
-  getUserProfile(): any {
-    return this.userService.findProfile(2);
+  getUserProfile(@Query('id') id: number): any {
+    return this.userService.findProfile(id);
   }
 
   @Get('/logs')
@@ -64,4 +66,9 @@ export class UserController {
       count: o.count,
     }));
   }
+
+  // @Get()
+  // getUser(@Param() '/:id'): any {
+  //   return ""
+  // }
 }
