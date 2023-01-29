@@ -34,8 +34,8 @@ export function buildConnectionOptions() {
     username: config[ConfigEnum.DB_USERNAME],
     password: config[ConfigEnum.DB_PASSWORD],
     database: config[ConfigEnum.DB_DATABASE],
-    synchronize: config[ConfigEnum.DB_SYNC],
-    logging: config[ConfigEnum.DB_LOGGING],
+    synchronize: config[ConfigEnum.DB_SYNC] === 'true',
+    logging: config[ConfigEnum.DB_LOGGING] === 'true',
     entities: entitiesDir,
   } as TypeOrmModuleOptions;
 }

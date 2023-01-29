@@ -1,23 +1,29 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, LoggerService } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
 import * as requestIp from 'request-ip';
 
 @Catch() // 不设置参数，默认捕获所有异常
 export class AllExceptionFilter implements ExceptionFilter {
-  private logger = new Logger(AllExceptionFilter.name);
-
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  constructor(private readonly logger: LoggerService, private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
     const request = ctx.getRequest();
+    const response = ctx.getResponse();
 
     const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message: unknown = exception['response'] || 'Internal Server Error';
+    const message: string = exception['response'] || 'Internal Server Error';
+
+    // 加入更多异常错误逻辑
+    // if (exception instanceof QueryFailedError) {
+    //   message = exception['message'];
+    //   // if (exception.driverError.errno === 1062) {
+    //   //   message = '唯一索引冲突';
+    //   // }
+    // }
 
     const responseBody = {
       headers: request.headers,

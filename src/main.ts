@@ -1,6 +1,5 @@
+import { Logger } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -11,7 +10,10 @@ import { AllExceptionFilter } from './filters/all-exception.filter';
 
 async function bootstrap() {
   const config = getServerConfig();
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {});
+  // 切换 fastify
+  // const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {});
+  // 默认 express
+  const app = await NestFactory.create(AppModule, {});
 
   // 指定url前缀
   app.setGlobalPrefix('api');
@@ -22,7 +24,8 @@ async function bootstrap() {
   // 全局使用过滤器
   // 全局过滤器只能有一个
   const httpAdapter = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
+  const logger = new Logger();
+  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
 
   // 允许跨域
   app.enableCors();

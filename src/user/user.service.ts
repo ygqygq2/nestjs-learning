@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 
 import { Logs } from '@/logs/logs.entity';
 
+import { contidtionUtils } from '@/utils/db.helper';
+
 import { GetUserDto } from './dto/get-user.dto';
 
 import { User } from './user.entity';
@@ -21,30 +23,42 @@ export class UserService {
     const skip = ((page || 1) - 1) * limit;
     // SELECT * from user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
     // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
-    return this.userRepository.find({
-      select: {
-        id: true,
-        username: true,
-        profile: {
-          gender: true,
-        },
-      },
-      relations: {
-        profile: true,
-        roles: true,
-      },
-      where: {
-        username,
-        profile: {
-          gender,
-        },
-        roles: {
-          id: role,
-        },
-      },
-      take,
-      skip,
-    });
+    // return this.userRepository.find({
+    //   select: {
+    //     id: true,
+    //     username: true,
+    //     profile: {
+    //       gender: true,
+    //     },
+    //   },
+    //   relations: {
+    //     profile: true,
+    //     roles: true,
+    //   },
+    //   where: {
+    //     username,
+    //     profile: {
+    //       gender,
+    //     },
+    //     roles: {
+    //       id: role,
+    //     },
+    //   },
+    //   take,
+    //   skip,
+    // });
+    const obj = {
+      'user.username': username,
+      'profile.gender': gender,
+      'roles.id': role,
+    };
+
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.roles', 'roles');
+    const newQuery = contidtionUtils<User>(queryBuilder, obj);
+    return newQuery.take(take).limit(skip).getMany();
   }
 
   find(username: string) {

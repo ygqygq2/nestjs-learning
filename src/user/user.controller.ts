@@ -1,12 +1,15 @@
-import { Controller, Delete, Get, Inject, LoggerService, Patch, Post, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, LoggerService, Patch, Post, Query, UseFilters } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+import { TypeormFilter } from '@/filters/typeorm.filter';
 
 import { GetUserDto } from './dto/get-user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
+@UseFilters(new TypeormFilter())
 export class UserController {
   constructor(
     private userService: UserService,
