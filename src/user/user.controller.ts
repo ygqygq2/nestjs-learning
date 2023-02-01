@@ -1,4 +1,18 @@
-import { Controller, Delete, Get, Inject, LoggerService, Patch, Post, Query, UseFilters } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  LoggerService,
+  Param,
+  Headers,
+  Patch,
+  Post,
+  Query,
+  UnauthorizedException,
+  UseFilters,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -41,9 +55,14 @@ export class UserController {
     // return this.userService.addUser();
   }
 
-  @Patch()
-  updateUser(): any {
-    return this.userService.update(1, { username: 'ygqygq2', password: 'ygqygq2' });
+  @Patch('/:id')
+  updateUser(@Body() dto: any, @Param('id') id: number, @Headers('Authorization') headers: any): any {
+    console.log('headers', headers);
+    if (id === headers) {
+      const user = dto as User;
+      return this.userService.update(id, user);
+    }
+    throw new UnauthorizedException();
   }
 
   @Delete()
