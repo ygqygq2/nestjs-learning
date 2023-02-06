@@ -21,8 +21,8 @@ export class UserService {
     const { limit, page, username, role, gender } = query;
     const take = limit || 10;
     const skip = ((page || 1) - 1) * limit;
-    // SELECT * from user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
-    // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
+    // SELECT* from user u, profile p, role r WHERE u.id= p.uid AND u.id= r.uid AND...
+    // SELECT* FROM user u LEFT JOIN profile p ON u.id= p.uid LEFT JOIN role r ON u.id= r.uid WHERE...
     // return this.userRepository.find({
     //   select: {
     //     id: true,
@@ -71,16 +71,17 @@ export class UserService {
 
   async create(user: User) {
     const userTmp = this.userRepository.create(user);
-    return this.userRepository.save(userTmp);
+    const res = await this.userRepository.save(userTmp);
+    return res;
   }
 
   async update(id: any, user: Partial<User>) {
     const userTemp = await this.findProfile(parseInt(id, 10));
     const newUser = this.userRepository.merge(userTemp, user);
-    // 联合模型更新，需要使用save方法或者queryBuilder
+    // 联合模型更新，需要使用 save 方法或者 queryBuilder
     return this.userRepository.save(newUser);
 
-    // 下面的update方法，只适合单模型的更新，不适合有关系的模型更新
+    // 下面的 update 方法，只适合单模型的更新，不适合有关系的模型更新
     // return this.userRepository.update(parseInt(id), newUser);
   }
 
@@ -110,14 +111,14 @@ export class UserService {
   }
 
   findLogsByGroup(id: number) {
-    // SELECT logs.result as result, COUNT(logs.result) AS count FROM logs, user WHERE logs.user_id = logs.userId AND user.id = 2 GROUP BY logs.result;
-    // return this.logsRepository.query("select * from logs")
+    // SELECT logs.result as result, COUNT(logs.result) AS count FROM logs, user WHERE logs.user_id= logs.userId AND user.id= 2 GROUP BY logs.result;
+    // return this.logsRepository.query("select* from logs")
     return this.logsRepository
       .createQueryBuilder('logs')
       .select('logs.result', 'result')
       .addSelect('COUNT("logs.result")', 'count')
       .leftJoinAndSelect('logs.user', 'user')
-      .where('user.id = :id', { id })
+      .where('user.id= :id', { id })
       .groupBy('logs.result')
       .orderBy('count', 'DESC')
       .addOrderBy('result', 'DESC')

@@ -11,11 +11,11 @@ import { AllExceptionFilter } from './filters/all-exception.filter';
 async function bootstrap() {
   const config = getServerConfig();
   // 切换 fastify
-  // const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {});
+  // const app= await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {});
   // 默认 express
   const app = await NestFactory.create(AppModule, {});
 
-  // 指定url前缀
+  // 指定 url 前缀
   app.setGlobalPrefix('api');
 
   // winston logger

@@ -19,9 +19,9 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     // 加入更多异常错误逻辑
     // if (exception instanceof QueryFailedError) {
-    //   message = exception['message'];
-    //   // if (exception.driverError.errno === 1062) {
-    //   //   message = '唯一索引冲突';
+    //   message= exception['message'];
+    //   // if (exception.driverError.errno=== 1062) {
+    //   //   message= '唯一索引冲突';
     //   // }
     // }
 

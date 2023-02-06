@@ -11,7 +11,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  plugins: ['@typescript-eslint', 'jest', 'prettier', 'import', 'unused-imports'],
+  plugins: ['@typescript-eslint', 'jest', 'prettier', 'import', 'unused-imports', 'zhlint'],
   extends: [
     // airbnb规范
     // https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
@@ -125,6 +125,16 @@ module.exports = {
     /* ********************************** 其它规则 ********************************** */
     'dot-notation': 'off',
     '@typescript-eslint/dot-notation': 'off',
+    'zhlint/zhlint': [
+      'warn',
+      {
+        lintComments: true,
+        lintStringLiterals: true,
+        zhlint: {
+          rules: ['space-full-width-content', 'space-punctuation'],
+        },
+      },
+    ],
   },
   settings: {
     extensions: ['.ts', '.d.ts', '.cts', '.mts', '.js', '.cjs', 'mjs', '.json'],

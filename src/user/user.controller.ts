@@ -18,7 +18,9 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { TypeormFilter } from '@/filters/typeorm.filter';
 
+import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
+import { CreateUserPipe } from './pipes/create-user.pipe';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -49,15 +51,17 @@ export class UserController {
   }
 
   @Post()
-  addUser(): any {
-    const user = { username: 'ygqygq2', password: '123456' } as User;
+  addUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
+    const user = dto as User;
     return this.userService.create(user);
     // return this.userService.addUser();
   }
 
   @Patch('/:id')
   updateUser(@Body() dto: any, @Param('id') id: number, @Headers('Authorization') headers: any): any {
-    console.log('headers', headers);
+    // 权限 1：判断用户是否是自己
+    // 权限 2：判断用户是否有更新 user 的权限
+    // 返回数据：不能包含敏感的 password 等信息
     if (id === headers) {
       const user = dto as User;
       return this.userService.update(id, user);
@@ -90,7 +94,7 @@ export class UserController {
   }
 
   // @Get()
-  // getUser(@Param() '/:id'): any {
+  // getUser(@Param() '/:id'): any{
   //   return ""
   // }
 }
