@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { conditionUtils } from 'src/utils/db.helper';
+import { In, Repository } from 'typeorm';
 
 import { Logs } from '@/logs/logs.entity';
 
-import { contidtionUtils } from '@/utils/db.helper';
+import { Roles } from '@/roles/roles.entity';
 
 import { GetUserDto } from './dto/get-user.dto';
-
 import { User } from './user.entity';
 
 @Injectable()
@@ -15,12 +15,14 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Logs) private readonly logsRepository: Repository<Logs>,
+    @InjectRepository(Roles)
+    private readonly rolesRepository: Repository<Roles>,
   ) {}
 
   findAll(query: GetUserDto) {
     const { limit, page, username, role, gender } = query;
     const take = limit || 10;
-    const skip = ((page || 1) - 1) * limit;
+    const skip = ((page || 1) - 1) * take;
     // SELECT* from user u, profile p, role r WHERE u.id= p.uid AND u.id= r.uid AND...
     // SELECT* FROM user u LEFT JOIN profile p ON u.id= p.uid LEFT JOIN role r ON u.id= r.uid WHERE...
     // return this.userRepository.find({
@@ -57,8 +59,8 @@ export class UserService {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
       .leftJoinAndSelect('user.roles', 'roles');
-    const newQuery = contidtionUtils<User>(queryBuilder, obj);
-    return newQuery.take(take).limit(skip).getMany();
+    const newQuery = conditionUtils<User>(queryBuilder, obj);
+    return newQuery.take(take).skip(skip).getMany();
   }
 
   find(username: string) {
@@ -70,7 +72,20 @@ export class UserService {
   }
 
   async create(user: User) {
+    if (!user.roles) {
+      const role = await this.rolesRepository.findOne({ where: { id: 2 } });
+      user.roles = [role];
+    }
+    if (user.roles instanceof Array && typeof user.roles[0] === 'number') {
+      // 查询所有的用户角色
+      user.roles = await this.rolesRepository.find({
+        where: {
+          id: In(user.roles),
+        },
+      });
+    }
     const userTmp = this.userRepository.create(user);
+    console.log(userTmp);
     const res = await this.userRepository.save(userTmp);
     return res;
   }

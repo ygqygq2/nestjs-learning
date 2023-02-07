@@ -52,6 +52,7 @@ export class UserController {
 
   @Post()
   addUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
+    console.log(dto);
     const user = dto as User;
     return this.userService.create(user);
     // return this.userService.addUser();
@@ -69,12 +70,12 @@ export class UserController {
     throw new UnauthorizedException();
   }
 
-  @Delete()
-  removeUser(): any {
-    return this.userService.remove(1);
+  @Delete('/:id')
+  removeUser(@Param('id') id: number): any {
+    return this.userService.remove(id);
   }
 
-  @Get('/profile')
+  @Get('/:id')
   getUserProfile(@Query('id') id: number): any {
     return this.userService.findProfile(id);
   }
