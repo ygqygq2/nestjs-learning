@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -26,6 +26,14 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost);
   const logger = new Logger();
   app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
+
+  // 全局拦截器
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // 去除在类上不存在的字段，生产环境建议开启，提高安全性
+      // whitelist: true,
+    }),
+  );
 
   // 允许跨域
   app.enableCors();

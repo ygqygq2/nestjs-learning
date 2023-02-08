@@ -85,7 +85,6 @@ export class UserService {
       });
     }
     const userTmp = this.userRepository.create(user);
-    console.log(userTmp);
     const res = await this.userRepository.save(userTmp);
     return res;
   }

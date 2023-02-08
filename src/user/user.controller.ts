@@ -12,6 +12,7 @@ import {
   Query,
   UnauthorizedException,
   UseFilters,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -52,7 +53,6 @@ export class UserController {
 
   @Post()
   addUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
-    console.log(dto);
     const user = dto as User;
     return this.userService.create(user);
     // return this.userService.addUser();
@@ -75,8 +75,9 @@ export class UserController {
     return this.userService.remove(id);
   }
 
+  // 不超过 3 个参数，建议直接使用类型管道
   @Get('/:id')
-  getUserProfile(@Query('id') id: number): any {
+  getUserProfile(@Query('id', ParseIntPipe) id: number): any {
     return this.userService.findProfile(id);
   }
 
