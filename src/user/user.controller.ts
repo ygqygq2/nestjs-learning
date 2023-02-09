@@ -13,8 +13,10 @@ import {
   UnauthorizedException,
   UseFilters,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AuthGuard } from '@nestjs/passport';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { TypeormFilter } from '@/filters/typeorm.filter';
@@ -76,8 +78,14 @@ export class UserController {
   }
 
   // 不超过 3 个参数，建议直接使用类型管道
-  @Get('/:id')
-  getUserProfile(@Query('id', ParseIntPipe) id: number): any {
+  @Get('/profile')
+  @UseGuards(AuthGuard('jwt'))
+  getUserProfile(
+    @Query('id', ParseIntPipe) id: any,
+    // 这里 req 中的 user 是通过 AuthGuard('jwt') 中的 validate 方法返回的 PassportModule 来添加的
+    // @Req() req
+  ): any {
+    // console.log('🚀 ~ file: user.controller.ts:84~ UserController~ getUserProfile~ Req', req.user);
     return this.userService.findProfile(id);
   }
 

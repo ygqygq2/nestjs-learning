@@ -8,7 +8,7 @@ export class SigninUserDto {
     // $property: 当前验证的属性名
     // $target: 当前验证的对象
     // $constraint1: 当前验证的规则
-    message: '用户名长度必须在 $constraint1 到 $constraint2 之间',
+    message: `用户名长度必须在 $constraint1 到 $constraint2 之间，当前传递的值是：$value`,
   })
   username: string;
 
