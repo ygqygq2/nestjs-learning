@@ -2,6 +2,8 @@ import { Body, ClassSerializerInterceptor, Controller, Get, Post, UseFilters, Us
 
 import { TypeormFilter } from '@/filters/typeorm.filter';
 
+import { SerializeInterceptor } from '@/interceptors/serialize.interceptor';
+
 import { AuthService } from './auth.service';
 import { SigninUserDto } from './dto/signin-user.dto';
 
@@ -32,6 +34,7 @@ export class AuthController {
   }
 
   @Post('/signup')
+  @UseInterceptors(SerializeInterceptor)
   signup(@Body() dto: SigninUserDto) {
     const { username, password } = dto;
     return this.authService.signup(username, password);
