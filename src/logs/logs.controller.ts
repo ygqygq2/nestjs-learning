@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-// import{ SerializeInterceptor} from '../interceptors/serialize.interceptor';
+import { Serialize } from '@/decorators/serialize.decorator';
 
 class LogsDto {
   @IsString()
@@ -15,7 +16,16 @@ class LogsDto {
   name: string;
 }
 
+class PublicLogsDto {
+  @Expose()
+  msg: string;
+
+  @Expose()
+  name: string;
+}
+
 @Controller('logs')
+// @UseGuards(JwtGuard, AdminGuard)
 export class LogsController {
   @Get()
   getTest() {
@@ -23,6 +33,7 @@ export class LogsController {
   }
 
   @Post()
+  @Serialize(PublicLogsDto)
   // @UseInterceptors(new SerializeInterceptor(PublicLogsDto))
   postTest(@Body() dto: LogsDto) {
     console.log('🚀 ~ file: logs.controller.ts~ line 15~ LogsController~ postTest~ dto', dto);

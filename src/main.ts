@@ -35,6 +35,11 @@ async function bootstrap() {
     }),
   );
 
+  // app.useGlobalGuards()
+  // 弊端 -> 无法使用 DI -> 无法访问 userService
+
+  // app.useGlobalInterceptors(new SerializeInterceptor());
+
   // 允许跨域
   app.enableCors();
   const port = typeof config['APP_PORT'] === 'string' ? parseInt(config['APP_PORT'], 10) : 3000;

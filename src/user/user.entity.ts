@@ -19,20 +19,20 @@ import { Profile } from './profile.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  @Exclude()
   id: number;
 
   @Column({ unique: true })
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @OneToMany(() => Logs, (logs) => logs.user, { cascade: true })
   logs: Logs[];
 
   @ManyToMany(() => Roles, (roles) => roles.users, { cascade: ['insert'] })
-  @JoinTable({ name: 'user_roles' })
+  @JoinTable({ name: 'users_roles' })
   roles: Roles[];
 
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })

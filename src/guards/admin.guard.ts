@@ -15,7 +15,7 @@ export class AdminGuard implements CanActivate {
     const user = (await this.userService.find(req.user.username)) as User;
     // 普通用户
     // 后面加入更多的逻辑
-    if (user.roles.filter((role) => role.id === 2).length > 0) {
+    if (user && user.roles.filter((role) => role.id === 2).length > 0) {
       return true;
     }
     return false;

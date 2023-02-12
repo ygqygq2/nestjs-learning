@@ -16,7 +16,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthGuard } from '@nestjs/passport';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { TypeormFilter } from '@/filters/typeorm.filter';
@@ -30,6 +29,8 @@ import { GetUserDto } from './dto/get-user.dto';
 import { CreateUserPipe } from './pipes/create-user.pipe';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+// import{Serialize} from '@/decorators/serialize.decorator';
+// import{PublicUserDto} from './dto/public-user.dto';
 
 @Controller('user')
 @UseFilters(new TypeormFilter())
@@ -54,6 +55,7 @@ export class UserController {
   @Get()
   @UseGuards(AdminGuard)
   @UseGuards(JwtGuard)
+  // @Serialize(PublicUserDto)
   getUsers(@Query() query: GetUserDto): any {
     return this.userService.findAll(query);
     // return this.userService.getUsers();
@@ -67,7 +69,7 @@ export class UserController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtGuard)
   updateUser(@Body() dto: any, @Param('id') id: number, @Headers('Authorization') headers: any): any {
     // 权限 1：判断用户是否是自己
     // 权限 2：判断用户是否有更新 user 的权限
