@@ -11,8 +11,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Logs } from '@/logs/logs.entity';
-import { Roles } from '@/roles/roles.entity';
+import { Logs } from '../logs/logs.entity';
+import { Roles } from '../roles/roles.entity';
 
 import { Profile } from './profile.entity';
 

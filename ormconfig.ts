@@ -5,9 +5,9 @@ import * as dotenv from 'dotenv';
 
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-import { ConfigEnum } from '@/enum/config.enum';
+import { ConfigEnum } from './src/enum/config.enum';
 
-// 通过环境变量读取不同的 .env 文件
+// 通过环境变量读取不同的. env 文件
 export function getEnv(env: string): Record<string, unknown> {
   if (fs.existsSync(env)) {
     return dotenv.parse(fs.readFileSync(env));
@@ -20,7 +20,7 @@ export function getServerConfig() {
   const config = { ...defaultConfig, ...envConfig };
   return config;
 }
-// 通过dotEnv 来解析不同的配置
+// 通过 dotEnv 来解析不同的配置
 export function buildConnectionOptions() {
   const defaultConfig = getEnv('.env');
   const envConfig = getEnv(`.env.${process.env.NODE_ENV || 'development'}`);
