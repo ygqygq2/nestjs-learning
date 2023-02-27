@@ -29,7 +29,7 @@ describe('AuthController（登录认证模块）', () => {
       controllers: [AuthController],
       providers: [
         {
-          provide: 'AuthService',
+          provide: AuthService,
           useValue: mockAuthService,
         },
       ],
@@ -53,7 +53,7 @@ describe('AuthController（登录认证模块）', () => {
     } as SigninUserDto);
     expect(await res).not.toBeNull();
     expect((await res).id).not.toBeNull();
-    expect((await res).password).toBeDefined();
+    expect((await res).password).toBeUndefined();
     expect((await res) instanceof User).toBeTruthy();
     expect((await res).username).toBe('test');
     expect((await res).roles.length).toBeGreaterThan(0);

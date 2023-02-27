@@ -24,7 +24,7 @@ export class AuthService {
         throw new ForbiddenException('用户名或密码错误');
       }
     } catch (error) {
-      throw new ForbiddenException('argon2 验证错误');
+      throw new ForbiddenException('用户名或密码错误');
     }
 
     // if (user && user.password=== password) {
