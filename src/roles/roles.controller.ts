@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '@/decorators/roles.decorator';
 
 import { Role } from '@/enum/roles.enum';
 

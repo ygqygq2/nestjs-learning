@@ -1,7 +1,7 @@
-import { Roles } from 'src/decorators/roles.decorator';
-import { Logs } from 'src/logs/logs.entity';
-import { Menus } from 'src/menus/menus.entity';
-import { User } from 'src/user/user.entity';
+import { Roles } from '@/decorators/roles.decorator';
+import { Logs } from '@/logs/logs.entity';
+import { Menus } from '@/menus/menus.entity';
+import { User } from '@/user/user.entity';
 
 // eslint-disable-next-line consistent-return
 export const getEntities = (path: string) => {

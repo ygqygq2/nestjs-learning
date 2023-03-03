@@ -1,12 +1,9 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { NestFactory } from '@nestjs/core';
 
 import { getServerConfig } from '../ormconfig';
 
 import { AppModule } from './app.module';
-import { AllExceptionFilter } from './filters/all-exception.filter';
+import { setupApp } from './setup';
 
 async function bootstrap() {
   const config = getServerConfig();
@@ -15,25 +12,7 @@ async function bootstrap() {
   // 默认 express
   const app = await NestFactory.create(AppModule, {});
 
-  // 指定 url 前缀
-  app.setGlobalPrefix('api');
-
-  // winston logger
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-
-  // 全局使用过滤器
-  // 全局过滤器只能有一个
-  const httpAdapter = app.get(HttpAdapterHost);
-  const logger = new Logger();
-  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
-
-  // 全局拦截器
-  app.useGlobalPipes(
-    new ValidationPipe({
-      // 去除在类上不存在的字段，生产环境建议开启，提高安全性
-      // whitelist: true,
-    }),
-  );
+  setupApp(app);
 
   // app.useGlobalGuards()
   // 弊端 -> 无法使用 DI -> 无法访问 userService

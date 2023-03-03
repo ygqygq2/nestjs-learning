@@ -1,0 +1,48 @@
+version: '3.9'
+
+networks:
+  app:
+    driver: bridge
+
+services:
+  # app:
+  #   image: ygqygq2/nestjs-learning:latest
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+
+  # redis:
+  #   container_name: redis
+  #   restart: always
+  #   image: redis:5.0.14
+  #   command: redis-server /etc/redis/redis.conf
+  #   networks:
+  #     - app
+  #   volumes:
+  #     - /opt/docker/redis/conf/redis.conf:/etc/redis/redis.conf
+  #     - /opt/docker/redis/data:/data
+  #   ports:
+  #     - "6379:6379"
+
+  mysql:
+    image: mariadb:10.9
+    ports:
+      - '3306:3306'
+    volumes:
+      - /data/docker/mysql/data:/var/lib/mysql
+      - /data/docker/mysql/log:/var/log/mysql
+    restart: always
+    command:
+      [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+        '--lower_case_table_names=1',
+        '--default-time-zone=+8:00',
+      ]
+    environment:
+      MARIADB_DATABASE: nestjs_learning
+      MARIADB_USER: nestjs_learning
+      MARIADB_PASSWORD: nestjs_learning
+      MARIADB_ROOT_PASSWORD: nestjs_learning2023
+    networks:
+      - app

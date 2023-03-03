@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { utilities, WinstonModule, WinstonModuleOptions } from 'nest-winston';
-import { LogEnum } from 'src/enum/config.enum';
+
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { Console } from 'winston/lib/winston/transports';
+
+import { LogEnum } from '@/enum/config.enum';
 
 import { LogsController } from './logs.controller';
 import { LogsService } from './logs.service';
