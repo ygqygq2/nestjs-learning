@@ -46,3 +46,11 @@ services:
       MARIADB_ROOT_PASSWORD: nestjs_learning2023
     networks:
       - app
+
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - 18080:8080
+    networks:
+      - app

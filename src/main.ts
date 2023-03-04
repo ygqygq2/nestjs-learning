@@ -21,8 +21,10 @@ async function bootstrap() {
 
   // 允许跨域
   app.enableCors();
+
   const port = typeof config['APP_PORT'] === 'string' ? parseInt(config['APP_PORT'], 10) : 3000;
   await app.listen(port, '0.0.0.0');
+  await app.init();
 
   if (module.hot) {
     module.hot.accept();
