@@ -7,9 +7,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { DataSource } from 'typeorm';
 
-import { AppModule } from '@/app.module';
-
 import datasource from '../ormconfig';
+import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/setup';
 
 export class AppFactory {
@@ -28,8 +27,8 @@ export class AppFactory {
     }).compile();
     const app = moduleFixture.createNestApplication();
     setupApp(app);
-    // const port = 3000;
-    // await app.listen(port);
+    const port = 3000;
+    await app.listen(port);
     await app.init();
     return new AppFactory(app);
   }
@@ -56,9 +55,10 @@ export class AppFactory {
   // 清除数据库数据，避免测试数据污染
   async cleanup() {
     const entities = this.connection.entityMetadatas;
+
     for (const entity of entities) {
       const repository = this.connection.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName};`);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
     }
   }
 

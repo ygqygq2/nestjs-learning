@@ -7,7 +7,8 @@ describe('AppController (e2e)', () => {
 
   let spec: Spec;
   beforeEach(() => {
-    //   pactum.request.setBaseUrl('http://localhost:3000');
+    // console.log('app', global.app);
+    // pactum.request.setBaseUrl('http://localhost:3000');
     spec = global.pactum as Spec;
   });
 
@@ -15,6 +16,9 @@ describe('AppController (e2e)', () => {
   it('/api (GET)', () => {
     // return request(app.getHttpServer()).get('/api').expect(200).expect('Hello World!');
 
+    // return spec.get('/api').expectStatus(200).expectBodyContains('Hello World!');
     return spec.get('/api').expectStatus(200).expectBodyContains('Hello World!');
+
+    // return pactum.spec().get('/api').expectStatus(200).expectBodyContains('Hello World!');
   });
 });

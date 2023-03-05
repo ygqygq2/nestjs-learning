@@ -1,12 +1,12 @@
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+// import{ HttpAdapterHost} from '@nestjs/core';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { getServerConfig } from '../ormconfig';
 
-import { AllExceptionFilter } from './filters/all-exception.filter';
+// import{ AllExceptionFilter} from './filters/all-exception.filter';
 
 export const setupApp = (app: INestApplication) => {
   const config = getServerConfig();
@@ -20,9 +20,9 @@ export const setupApp = (app: INestApplication) => {
 
   // 全局使用过滤器
   // 全局过滤器只能有一个
-  const httpAdapter = app.get(HttpAdapterHost);
-  const logger = new Logger();
-  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
+  // const httpAdapter= app.get(HttpAdapterHost);
+  // const logger= new Logger();
+  // app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
 
   // 全局拦截器
   app.useGlobalPipes(

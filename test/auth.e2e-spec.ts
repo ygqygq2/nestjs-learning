@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect */
-import Spec from 'pactum/src/models/Spec';
+import * as Spec from 'pactum/src/models/Spec';
 
 describe('Auth 登录认证 e2e 测试', () => {
   let spec: Spec;
@@ -72,7 +72,7 @@ describe('Auth 登录认证 e2e 测试', () => {
 
   // 登录用户密码错误
   it('登录用户密码错误', async () => {
-    await global.pactum.spec().post('/api/auth/signup').withBody(user);
+    await global.spec().post('/api/auth/signup').withBody(user);
 
     return spec
       .post('/api/auth/signin')
