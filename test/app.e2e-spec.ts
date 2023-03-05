@@ -9,7 +9,7 @@ describe('AppController (e2e)', () => {
   beforeEach(() => {
     // console.log('app', global.app);
     // pactum.request.setBaseUrl('http://localhost:3000');
-    spec = global.pactum as Spec;
+    spec = global.spec as Spec;
   });
 
   // eslint-disable-next-line jest/expect-expect
