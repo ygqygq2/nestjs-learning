@@ -13,6 +13,16 @@
       "runtimeExecutable": "pnpm",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"
+    },
+    {
+      "name": "debug nest test:e2e",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "test:e2e"],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "runtimeExecutable": "pnpm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
     }
   ]
 }

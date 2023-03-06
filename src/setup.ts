@@ -17,6 +17,7 @@ export const setupApp = (app: INestApplication) => {
   flag && app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   // 指定 url 前缀
   app.setGlobalPrefix('api');
+  app.enableShutdownHooks();
 
   // 全局使用过滤器
   // 全局过滤器只能有一个

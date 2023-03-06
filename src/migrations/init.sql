@@ -1,25 +1,6 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : remote
- Source Server Type    : MySQL
- Source Server Version : 50740 (5.7.40-log)
- Source Host           : 129.211.168.183:3306
- Source Schema         : nestjs_learning
-
- Target Server Type    : MySQL
- Target Server Version : 50740 (5.7.40-log)
- File Encoding         : 65001
-
- Date: 04/03/2023 23:46:33
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- ----------------------------
--- Table structure for logs
--- ----------------------------
 DROP TABLE IF EXISTS `logs`;
 CREATE TABLE `logs`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -34,10 +15,6 @@ CREATE TABLE `logs`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (2, '用户管理', '/home/users', 0, '');
 
-
--- ----------------------------
--- Table structure for menus
--- ----------------------------
 DROP TABLE IF EXISTS `menus`;
 CREATE TABLE `menus`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -48,9 +25,6 @@ CREATE TABLE `menus`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for migrations
--- ----------------------------
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -59,9 +33,6 @@ CREATE TABLE `migrations`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for profile
--- ----------------------------
 DROP TABLE IF EXISTS `profile`;
 CREATE TABLE `profile`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -74,9 +45,6 @@ CREATE TABLE `profile`  (
   CONSTRAINT `FK_a24972ebd73b106250713dcddd9` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for role_menus
--- ----------------------------
 DROP TABLE IF EXISTS `role_menus`;
 CREATE TABLE `role_menus`  (
   `menusId` int(11) NOT NULL,
@@ -89,9 +57,6 @@ CREATE TABLE `role_menus`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 INSERT INTO `role_menus` (`menusId`, `rolesId`) VALUES (2,	2), (3,	2);
 
--- ----------------------------
--- Table structure for roles
--- ----------------------------
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -99,9 +64,6 @@ CREATE TABLE `roles`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for user
--- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -111,9 +73,6 @@ CREATE TABLE `user`  (
   UNIQUE INDEX `IDX_78a916df40e02a9deb1c4b75ed`(`username`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for users_roles
--- ----------------------------
 DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE `users_roles`  (
   `userId` int(11) NOT NULL,

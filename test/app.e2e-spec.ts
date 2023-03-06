@@ -9,16 +9,13 @@ describe('AppController (e2e)', () => {
   beforeEach(() => {
     // console.log('app', global.app);
     // pactum.request.setBaseUrl('http://localhost:3000');
-    spec = global.pactum as Spec;
+    spec = global.spec as Spec;
   });
 
   // eslint-disable-next-line jest/expect-expect
   it('/api (GET)', () => {
     // return request(app.getHttpServer()).get('/api').expect(200).expect('Hello World!');
-
-    // return spec.get('/api').expectStatus(200).expectBodyContains('Hello World!');
+    // return pactum.spec.get('/api').expectStatus(200).expectBodyContains('Hello World!');
     return spec.get('/api').expectStatus(200).expectBodyContains('Hello World!');
-
-    // return pactum.spec().get('/api').expectStatus(200).expectBodyContains('Hello World!');
   });
 });
