@@ -1,10 +1,9 @@
-import { readFileSync } from 'fs';
-
 import { join } from 'path';
 
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import * as lineReader from 'line-reader';
 import { DataSource } from 'typeorm';
 
 import datasource from '../ormconfig';
@@ -45,24 +44,35 @@ export class AppFactory {
     // 定义 sql 执行 runner
     const queryRunner = this.connection.createQueryRunner();
     // 读取 sql 文件
-    const sqlFile = readFileSync(join(__dirname, '../src/migrations/init.sql'), 'utf8');
-    // 执行 sql 文件，为了一行一行执行，使用; 分割
-    const sqls = sqlFile.split(';');
-    // 循环导入初始化数据
-    for (let sql of sqls) {
-      // 删除回车换行符
-      sql = sql.replace(/\r?\n/g, '');
-      // 删除注释
-      sql = sql.replace(/--.*$/, '').trim();
-      if (sql.length > 0) {
-        await queryRunner.query(sql);
+    let sql = '';
+    lineReader.eachLine(join(__dirname, '../src/migrations/init.sql'), async (line: string) => {
+      // 注释开头直接跳过
+      if (line.indexOf('--') === 0) return;
+      // 注释在行尾时，去掉注释
+      if (line.indexOf('--') > 0) {
+        sql += line.substring(0, line.indexOf('--'));
+      } else {
+        sql += line;
       }
-    }
+      // 去掉空格
+      sql = sql.trim();
+      // 去掉空行
+      if (sql.length === 0) return;
+      // 去掉回车换行符
+      sql = sql.replace(/\r?\n|\r/g, '');
+      // 分号结尾时执行 SQL
+      if (sql.endsWith(';')) {
+        await queryRunner.query(sql);
+        // 清空 sql 内容
+        sql = '';
+      }
+      console.log(sql);
+    });
   }
 
   // 清除数据库数据，避免测试数据污染
   async cleanup() {
-    console.log('Cleaning up database...');
+    // console.log('Cleaning up database...');
     // console.log(this.connection);
     const entities = this.connection?.entityMetadatas || [];
 
