@@ -17,11 +17,12 @@ global.beforeEach(async () => {
 
   appFactory = await AppFactory.init();
   await appFactory?.destroy();
-  await appFactory.initDB();
+  // 初始化基础数据库导入 SQL
+  // await appFactory.initDB();
   app = appFactory.instance;
 
   pactum.request.setBaseUrl(await app.getUrl());
-  // pactum.settings.setLogLevel('SILENT');
+  pactum.settings.setLogLevel('SILENT');
 
   global.pactum = pactum;
   global.spec = pactum.spec();
@@ -30,8 +31,10 @@ global.beforeEach(async () => {
 });
 
 global.afterEach(async () => {
-  await appFactory?.destroy();
+  // 清除脏数据
   await appFactory?.cleanup();
+  // 断开与数据库边接
+  await appFactory?.destroy();
   await app?.close();
 
   // console.log('Cleaning up Pactum global variables');

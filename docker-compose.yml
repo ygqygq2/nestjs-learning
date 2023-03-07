@@ -31,6 +31,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
+      - ./deploy/mariadb/conf:/etc/mysql
       - /data/docker/mysql/data:/var/lib/mysql
       - /data/docker/mysql/log:/var/log/mysql
     restart: always

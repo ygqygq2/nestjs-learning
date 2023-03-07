@@ -49,7 +49,7 @@ describe('Auth 登录认证 e2e 测试', () => {
       .post('/api/auth/signup')
       .withBody(user)
       .expectStatus(400)
-      .expectBodyContains('用户名长度必须在6到20之间');
+      .expectBodyContains('用户名长度必须在 6 到 20 之间');
   });
 
   // todo 作业：自行完成 username,password 效验测试用例
