@@ -13,7 +13,6 @@ CREATE TABLE `logs`  (
   INDEX `FK_a1196a1956403417fe3a0343390`(`userId`) USING BTREE,
   CONSTRAINT `FK_a1196a1956403417fe3a0343390` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (2, '用户管理', '/home/users', 0, '');
 
 DROP TABLE IF EXISTS `menus`;
 CREATE TABLE `menus`  (
@@ -24,6 +23,7 @@ CREATE TABLE `menus`  (
   `acl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (2, '用户管理', '/home/users', 0, '');
 
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations`  (

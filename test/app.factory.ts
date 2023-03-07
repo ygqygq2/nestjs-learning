@@ -32,20 +32,11 @@ export class AppFactory {
     return new AppFactory(app);
   }
 
-  // 初始化 DB 数据库
-  async initDB() {
-    // console.log(datasource.isInitialized);
-    if (!datasource.isInitialized) {
-      await datasource.initialize();
-      // console.log(datasource.isInitialized);
-    }
-    this.connection = datasource;
-
-    // 定义 sql 执行 runner
-    const queryRunner = this.connection.createQueryRunner();
-    // 读取 sql 文件
+  static convertSqls = () => {
+    // 读取 sql 文件转换成 sql 列表
+    const sqls = [];
     let sql = '';
-    lineReader.eachLine(join(__dirname, '../src/migrations/init.sql'), async (line: string) => {
+    lineReader.eachLine(join(__dirname, '../src/migrations/init.sql'), (line: string) => {
       // 注释开头直接跳过
       if (line.indexOf('--') === 0) return;
       // 注释在行尾时，去掉注释
@@ -59,15 +50,36 @@ export class AppFactory {
       // 去掉空行
       if (sql.length === 0) return;
       // 去掉回车换行符
-      sql = sql.replace(/\r?\n|\r/g, '');
+      // sql= sql.replace(/\r?\n|\r/g, '');
       // 分号结尾时执行 SQL
       if (sql.endsWith(';')) {
-        await queryRunner.query(sql);
+        // await queryRunner.query(sql);
         // 清空 sql 内容
+        sqls.push(sql);
         sql = '';
       }
-      console.log(sql);
     });
+    return sqls;
+  };
+
+  // 初始化 DB 数据库
+  async initDB() {
+    console.log(datasource.isInitialized);
+    if (!datasource.isInitialized) {
+      await datasource.initialize();
+      console.log(datasource.isInitialized);
+    }
+    this.connection = datasource;
+
+    // 定义 sql 执行 runner
+    const queryRunner = this.connection.createQueryRunner();
+    // 执行 sql
+    const sqls = AppFactory.convertSqls();
+    for (let i = 0; i < sqls.length; i++) {
+      console.log(sqls[i]);
+      const result = await queryRunner.query(sqls[i]);
+      console.log(result);
+    }
   }
 
   // 清除数据库数据，避免测试数据污染
@@ -78,7 +90,7 @@ export class AppFactory {
 
     for (const entity of entities) {
       const repository = this.connection.getRepository(entity.name);
-      await repository?.query(`DELETE FROM ${entity.tableName};`);
+      await repository?.query(`DELETE FROM ${entity.tableName}`);
     }
   }
 

@@ -21,16 +21,18 @@ global.beforeEach(async () => {
   app = appFactory.instance;
 
   pactum.request.setBaseUrl(await app.getUrl());
+  // pactum.settings.setLogLevel('SILENT');
+
   global.pactum = pactum;
   global.spec = pactum.spec();
-  // global.app = app;
-  console.log('Setting Pactum global variables');
+  // global.app= app;
+  // console.log('Setting Pactum global variables');
 });
 
 global.afterEach(async () => {
   await appFactory?.destroy();
   await appFactory?.cleanup();
-  await app.close();
+  await app?.close();
 
-  console.log('Cleaning up Pactum global variables');
+  // console.log('Cleaning up Pactum global variables');
 });

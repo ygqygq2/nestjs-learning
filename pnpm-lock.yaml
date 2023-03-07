@@ -17,6 +17,7 @@ specifiers:
   '@nestjs/typeorm': ^9.0.1
   '@types/express': ^4.17.14
   '@types/jest': 29.2.4
+  '@types/line-reader': ^0.0.34
   '@types/node': ^18.11.13
   '@types/passport-jwt': ^3.0.8
   '@types/request-ip': ^0.0.37
@@ -116,6 +117,7 @@ devDependencies:
   '@nestjs/testing': 9.2.1_wdbvfsxfdwzlwdfiyh2gynjl4m
   '@types/express': 4.17.14
   '@types/jest': 29.2.4
+  '@types/line-reader': 0.0.34
   '@types/node': 18.11.13
   '@types/passport-jwt': 3.0.8
   '@types/request-ip': 0.0.37
@@ -1516,6 +1518,12 @@ packages:
 
   /@types/jsonwebtoken/9.0.1:
     resolution: {integrity: sha512-c5ltxazpWabia/4UzhIoaDcIza4KViOQhdbjRlfcIGVnsE3c3brkz9Z+F/EeJIECOQP7W7US2hNE930cWWkPiw==}
+    dependencies:
+      '@types/node': 18.11.13
+    dev: true
+
+  /@types/line-reader/0.0.34:
+    resolution: {integrity: sha512-r6RzbnrY+IoBgDIO4P6l2a+/ad+YCLe/htv7hp+Oqsqeb7cJbV3keKpg07ZlLlk3ZJz9xozNO8lFOiKRux234Q==}
     dependencies:
       '@types/node': 18.11.13
     dev: true
