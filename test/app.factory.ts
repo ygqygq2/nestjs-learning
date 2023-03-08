@@ -11,7 +11,8 @@ import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/setup';
 
 export class AppFactory {
-  connection: DataSource;
+  // connection: DataSource;
+  static connection: DataSource;
 
   constructor(private app: INestApplication) {}
 
@@ -21,6 +22,12 @@ export class AppFactory {
 
   // 初始化 App 实例
   static async init() {
+    // 初始化 this.connection
+    if (!datasource.isInitialized) {
+      await datasource.initialize();
+    }
+    this.connection = datasource;
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -34,13 +41,6 @@ export class AppFactory {
 
   // 初始化 DB 数据库, 导入基础数据
   async initDB() {
-    // console.log(datasource.isInitialized);
-    if (!datasource.isInitialized) {
-      await datasource.initialize();
-      // console.log(datasource.isInitialized);
-    }
-    this.connection = datasource;
-
     // 定义 sql 执行 runner
     const queryRunner = this.connection.createQueryRunner();
     // take a connection from the connection pool
@@ -78,27 +78,31 @@ export class AppFactory {
         // 清空 sql 内容
         const runSql = sql.replace(';', '');
         sql = '';
-        await queryRunner.query(runSql);
+        await queryRunner.query(runSql).catch((err) => {
+          throw new Error(`[${runSql}] run error`, err);
+        });
       }
     })
-      .then(() => {
-        console.log('done');
-      })
+      .then(() => {})
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
-    // await queryRunner.release();
+    await queryRunner.release();
   }
 
   // 清除数据库数据，避免测试数据污染
   async cleanup() {
-    // console.log('Cleaning up database...');
-    // console.log(this.connection);
+    // 清空所有表数据
     const entities = this.connection?.entityMetadatas || [];
-
     for (const entity of entities) {
-      const repository = this.connection.getRepository(entity.name);
-      await repository?.query(`DELETE FROM ${entity.tableName}`);
+      this.connection
+        .createQueryBuilder()
+        .delete()
+        .from(entity.name)
+        .execute()
+        .catch((err) => {
+          throw new Error(`[DELETE FROM ${entity.tableName}] run error`, err);
+        });
     }
   }
 

@@ -12,7 +12,7 @@ CREATE TABLE `logs`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK_a1196a1956403417fe3a0343390`(`userId`) USING BTREE,
   CONSTRAINT `FK_a1196a1956403417fe3a0343390` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `menus`;
 CREATE TABLE `menus`  (
@@ -22,8 +22,10 @@ CREATE TABLE `menus`  (
   `order` int(11) NOT NULL,
   `acl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (2, '用户管理', '/home/users', 0, '');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (1, '用户管理', '/home/users', 0, '');
+INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (2, '角色管理', '/home/roles', 1, '');
+INSERT INTO `menus` (`id`, `name`, `path`, `order`, `acl`) VALUES (3, '菜单管理', '/home/menus', 2, '');
 
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations`  (
@@ -31,7 +33,7 @@ CREATE TABLE `migrations`  (
   `timestamp` bigint(20) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `profile`;
 CREATE TABLE `profile`  (
@@ -43,7 +45,7 @@ CREATE TABLE `profile`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `REL_a24972ebd73b106250713dcddd`(`userId`) USING BTREE,
   CONSTRAINT `FK_a24972ebd73b106250713dcddd9` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `role_menus`;
 CREATE TABLE `role_menus`  (
@@ -62,7 +64,9 @@ CREATE TABLE `roles`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+INSERT INTO `roles` (`id`, `name`) VALUES (1, '超级管理员');
+INSERT INTO `roles` (`id`, `name`) VALUES (2, '普通用户');
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
@@ -71,7 +75,7 @@ CREATE TABLE `user`  (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `IDX_78a916df40e02a9deb1c4b75ed`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE `users_roles`  (
@@ -84,10 +88,6 @@ CREATE TABLE `users_roles`  (
   CONSTRAINT `FK_776b7cf9330802e5ef5a8fb18dc` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 INSERT INTO `users_roles` (`userId`, `rolesId`) VALUES (2, 2);
-INSERT INTO `users_roles` (`userId`, `rolesId`) VALUES (29, 2);
-INSERT INTO `users_roles` (`userId`, `rolesId`) VALUES (31, 2);
-INSERT INTO `users_roles` (`userId`, `rolesId`) VALUES (32, 2);
-INSERT INTO `users_roles` (`userId`, `rolesId`) VALUES (33, 2);
 
-
-SET FOREIGN_KEY_CHECKS = 1;
+show variables like 'server_id';
+-- SET FOREIGN_KEY_CHECKS = 1;
