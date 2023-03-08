@@ -11,8 +11,7 @@ import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/setup';
 
 export class AppFactory {
-  // connection: DataSource;
-  static connection: DataSource;
+  connection: DataSource;
 
   constructor(private app: INestApplication) {}
 
@@ -22,12 +21,6 @@ export class AppFactory {
 
   // 初始化 App 实例
   static async init() {
-    // 初始化 this.connection
-    if (!datasource.isInitialized) {
-      await datasource.initialize();
-    }
-    this.connection = datasource;
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -37,6 +30,14 @@ export class AppFactory {
     await app.listen(port);
     await app.init();
     return new AppFactory(app);
+  }
+
+  // 初始化数据库连接
+  async connectDB() {
+    if (!datasource.isInitialized) {
+      await datasource.initialize();
+    }
+    this.connection = datasource;
   }
 
   // 初始化 DB 数据库, 导入基础数据
@@ -94,16 +95,22 @@ export class AppFactory {
   async cleanup() {
     // 清空所有表数据
     const entities = this.connection?.entityMetadatas || [];
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
     for (const entity of entities) {
-      this.connection
-        .createQueryBuilder()
-        .delete()
-        .from(entity.name)
-        .execute()
-        .catch((err) => {
-          throw new Error(`[DELETE FROM ${entity.tableName}] run error`, err);
-        });
+      await queryRunner.query(`SET FOREIGN_KEY_CHECKS= 0;DELETE FROM ${entity.name};`).catch((err) => {
+        throw new Error(`[DELETE FROM ${entity.name}] run error`, err);
+      });
+      // await this.connection
+      //   .createQueryBuilder()
+      //   .delete()
+      //   .from(entity.name)
+      //   .execute()
+      //   .catch((err) => {
+      //     throw new Error(`[DELETE FROM ${entity.name}] run error`, err);
+      //   });
     }
+    await queryRunner.release();
   }
 
   // 断开与数据库的连接，避免后序数据库连接过多而无法连接

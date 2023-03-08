@@ -15,9 +15,10 @@ global.beforeAll(async () => {
 
 global.beforeEach(async () => {
   appFactory = await AppFactory.init();
+  // 初始化数据库连接
+  await appFactory.connectDB();
   // 初始化基础数据库导入 SQL
   // await appFactory.initDB();
-  // await appFactory?.destroy();
   app = appFactory.instance;
 
   pactum.request.setBaseUrl(await app.getUrl());
@@ -30,7 +31,6 @@ global.afterEach(async () => {
   // 清除脏数据
   await appFactory?.cleanup();
   await app?.close();
-  // console.log('Cleaning up Pactum global variables');
 });
 
 global.afterAll(async () => {
