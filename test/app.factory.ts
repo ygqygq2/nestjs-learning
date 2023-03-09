@@ -4,14 +4,16 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import lineReader from 'line-reader';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
 
 import datasource from '../ormconfig';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/setup';
 
 export class AppFactory {
-  connection: DataSource;
+  private connection: DataSource;
+
+  private queryRunner: QueryRunner;
 
   constructor(private app: INestApplication) {}
 
@@ -40,12 +42,19 @@ export class AppFactory {
     this.connection = datasource;
   }
 
+  // 执行 sql
+  private async runSQL(sql: string) {
+    if (!this.queryRunner) {
+      this.queryRunner = this.connection.createQueryRunner();
+      await this.queryRunner.connect();
+    }
+    await this.queryRunner.query(sql).catch((err) => {
+      throw new Error(`[${sql}] run error`, err);
+    });
+  }
+
   // 初始化 DB 数据库, 导入基础数据
   async initDB() {
-    // 定义 sql 执行 runner
-    const queryRunner = this.connection.createQueryRunner();
-    // take a connection from the connection pool
-    await queryRunner.connect();
     let sql = '';
     const eachLine = (filename: string, options?: any, iteratee?: any) => {
       return new Promise<void>((resolve, reject) => {
@@ -79,38 +88,26 @@ export class AppFactory {
         // 清空 sql 内容
         const runSql = sql.replace(';', '');
         sql = '';
-        await queryRunner.query(runSql).catch((err) => {
-          throw new Error(`[${runSql}] run error`, err);
-        });
+        await this.runSQL(runSql);
       }
     })
       .then(() => {})
       .catch((err) => {
         console.error(err);
       });
-    await queryRunner.release();
+    await this.queryRunner.release();
   }
 
   // 清除数据库数据，避免测试数据污染
   async cleanup() {
     // 清空所有表数据
     const entities = this.connection?.entityMetadatas || [];
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
+    await this.runSQL(`SET FOREIGN_KEY_CHECKS= 0;`);
     for (const entity of entities) {
-      await queryRunner.query(`SET FOREIGN_KEY_CHECKS= 0;DELETE FROM ${entity.name};`).catch((err) => {
-        throw new Error(`[DELETE FROM ${entity.name}] run error`, err);
-      });
-      // await this.connection
-      //   .createQueryBuilder()
-      //   .delete()
-      //   .from(entity.name)
-      //   .execute()
-      //   .catch((err) => {
-      //     throw new Error(`[DELETE FROM ${entity.name}] run error`, err);
-      //   });
+      await this.runSQL(`DELETE FROM ${entity.name};`);
     }
-    await queryRunner.release();
+    await this.runSQL(`SET FOREIGN_KEY_CHECKS= 1;`);
+    await this.queryRunner.release();
   }
 
   // 断开与数据库的连接，避免后序数据库连接过多而无法连接

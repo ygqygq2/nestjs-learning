@@ -45,9 +45,8 @@ describe('Auth 登录认证 e2e 测试', () => {
       username: 'test123',
       password: '123456',
     };
-    await global.pactum.spec().post('/api/auth/signup').withBody(user);
+    // await global.pactum.spec().post('/api/auth/signup').withBody(user);
 
-    // 默认会重试一次，所有打印 2 次
     return spec.post('/api/auth/signup').withBody(user).expectStatus(403).expectBodyContains('用户已存在');
   });
 

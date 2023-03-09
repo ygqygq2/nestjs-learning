@@ -28,8 +28,8 @@ global.beforeEach(async () => {
 });
 
 global.afterEach(async () => {
-  // 清除脏数据
-  await appFactory?.cleanup();
+  // 清除脏数据，pactum 会自动清除
+  // await appFactory?.cleanup();
   await app?.close();
 });
 
