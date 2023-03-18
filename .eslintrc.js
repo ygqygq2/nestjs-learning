@@ -131,7 +131,11 @@ module.exports = {
         lintComments: true,
         lintStringLiterals: true,
         zhlint: {
-          rules: ['space-full-width-content', 'space-punctuation'],
+          rules: {
+            halfWidthPunctuation: '',
+            fullWidthPunctuation: '，。：；？！“”‘’（）',
+            unifiedPunctuation: 'traditional',
+          },
         },
       },
     ],
